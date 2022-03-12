@@ -1,6 +1,8 @@
 package com.example.streaminganalytics.consumer;
 
 import com.example.streaminganalytics.Constants;
+import com.example.streaminganalytics.domain.DataInput;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
@@ -23,7 +25,8 @@ public class Consumer {
      */
     @RabbitHandler
     public void consume(byte[] input) throws IOException {
-        String message = new String(input, StandardCharsets.UTF_8);
-        System.out.println("Message recibed: " + message);
+        final String message = new String(input, StandardCharsets.UTF_8);
+        final DataInput dataInput = new ObjectMapper().readValue(message, DataInput.class);
+        System.out.println("Message recibed: " + dataInput);
     }
 }
