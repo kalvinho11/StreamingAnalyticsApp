@@ -1,0 +1,17 @@
+server:
+  port: 8080
+spring:
+  rabbitmq:
+    host: localhost
+    password: mypassword
+    username: myuser
+    exchange: exchange
+    routingKey: routing
+    queue: data
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: analytics
+      username: appUser
+      password: password
