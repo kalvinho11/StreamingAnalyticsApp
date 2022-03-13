@@ -11,3 +11,14 @@ services:
       - '5672:5672'
       # HTTP management UI
       - '15672:15672'
+  mongodb:
+    container_name: "mongodb"
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ./scripts/mongo/init/:/docker-entrypoint-initdb.d
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
