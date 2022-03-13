@@ -5,3 +5,10 @@ spring:
     host: localhost
     password: mypassword
     username: myuser
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: analytics
+      username: appUser
+      password: password

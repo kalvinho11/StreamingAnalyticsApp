@@ -4,6 +4,7 @@ import com.example.streaminganalytics.Constants;
 import com.example.streaminganalytics.domain.DataInput;
 import com.example.streaminganalytics.service.StatisticsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * The message consumer.
  */
+@Slf4j
 @RabbitListener(queues = Constants.QUEUE_NAME)
 @Component
 public class Consumer {
@@ -32,7 +34,7 @@ public class Consumer {
     public void consume(byte[] input) throws IOException {
         final String message = new String(input, StandardCharsets.UTF_8);
         final DataInput dataInput = new ObjectMapper().readValue(message, DataInput.class);
-        System.out.println("Message recibed: " + dataInput);
+        log.debug("Message received.");
         this.statisticsService.doCalculations(dataInput);
     }
 }
