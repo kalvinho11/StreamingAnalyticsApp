@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.example.streaminganalytics.Constants.*;
-
 @Configuration
 public class MessagingConfiguration {
 
@@ -21,15 +19,21 @@ public class MessagingConfiguration {
     private String password;
     @Value("${spring.rabbitmq.host}")
     private String host;
+    @Value("${spring.rabbitmq.exchange}")
+    private String exchange;
+    @Value("${spring.rabbitmq.routingKey}")
+    private String routingKey;
+    @Value("${spring.rabbitmq.queue}")
+    private String queue;
 
     @Bean
     Queue queue() {
-        return new Queue(QUEUE_NAME, IS_DURABLE_QUEUE);
+        return new Queue(queue);
     }
 
     @Bean
     TopicExchange exchange() {
-        return new TopicExchange(EXCHANGE_NAME);
+        return new TopicExchange(exchange);
     }
 
     @Bean
@@ -37,7 +41,7 @@ public class MessagingConfiguration {
         return BindingBuilder
                 .bind(queue())
                 .to(exchange())
-                .with(ROUTING_KEY);
+                .with(routingKey);
     }
 
     @Bean

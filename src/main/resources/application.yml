@@ -5,6 +5,9 @@ spring:
     host: localhost
     password: mypassword
     username: myuser
+    exchange: exchange
+    routingKey: routing
+    queue: data
   data:
     mongodb:
       host: localhost

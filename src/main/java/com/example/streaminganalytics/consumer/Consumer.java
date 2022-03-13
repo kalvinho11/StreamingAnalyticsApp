@@ -1,6 +1,5 @@
 package com.example.streaminganalytics.consumer;
 
-import com.example.streaminganalytics.Constants;
 import com.example.streaminganalytics.domain.DataInput;
 import com.example.streaminganalytics.service.StatisticsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,7 +16,7 @@ import java.nio.charset.StandardCharsets;
  * The message consumer.
  */
 @Slf4j
-@RabbitListener(queues = Constants.QUEUE_NAME)
+@RabbitListener(queues = "${spring.rabbitmq.queue}")
 @Component
 public class Consumer {
 

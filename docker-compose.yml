@@ -1,18 +1,24 @@
 version: "3.8"
 services:
+  streaming-analytics:
+    build:  .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+      - mongodb
+    network_mode: "host"
   rabbitmq:
-    container_name: "rabbitmq"
+    container_name: rabbitmq
     image: rabbitmq:3-management
     environment:
       - RABBITMQ_DEFAULT_USER=myuser
       - RABBITMQ_DEFAULT_PASS=mypassword
     ports:
-      # AMQP protocol port
       - '5672:5672'
-      # HTTP management UI
       - '15672:15672'
   mongodb:
-    container_name: "mongodb"
+    container_name: mongodb
     image: mongo:latest
     restart: always
     ports:
@@ -20,5 +26,5 @@ services:
     volumes:
       - ./scripts/mongo/init/:/docker-entrypoint-initdb.d
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
