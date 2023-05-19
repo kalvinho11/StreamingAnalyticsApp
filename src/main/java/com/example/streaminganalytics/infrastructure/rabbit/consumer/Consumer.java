@@ -1,7 +1,7 @@
-package com.example.streaminganalytics.consumer;
+package com.example.streaminganalytics.infrastructure.rabbit.consumer;
 
 import com.example.streaminganalytics.domain.DataInput;
-import com.example.streaminganalytics.service.StatisticsService;
+import com.example.streaminganalytics.application.service.StatisticsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;

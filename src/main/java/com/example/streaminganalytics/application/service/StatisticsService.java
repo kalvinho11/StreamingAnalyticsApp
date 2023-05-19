@@ -1,4 +1,4 @@
-package com.example.streaminganalytics.service;
+package com.example.streaminganalytics.application.service;
 
 import com.example.streaminganalytics.domain.DataInput;
 
@@ -7,5 +7,5 @@ import com.example.streaminganalytics.domain.DataInput;
  */
 public interface StatisticsService {
 
-    public void doCalculations(final DataInput input);
+    void doCalculations(final DataInput input);
 }

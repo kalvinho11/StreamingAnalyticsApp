@@ -1,10 +1,10 @@
-package com.example.streaminganalytics.service.impl;
+package com.example.streaminganalytics.application.service.impl;
 
 import com.example.streaminganalytics.domain.DataInput;
 import com.example.streaminganalytics.domain.DataStream;
 import com.example.streaminganalytics.domain.StreamingAnalytics;
-import com.example.streaminganalytics.repository.StreamingAnalyticsRepository;
-import com.example.streaminganalytics.service.StatisticsService;
+import com.example.streaminganalytics.domain.repository.StreamingAnalyticsRepository;
+import com.example.streaminganalytics.application.service.StatisticsService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
