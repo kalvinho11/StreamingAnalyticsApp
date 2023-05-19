@@ -1,4 +1,4 @@
-package com.example.streaminganalytics.repository;
+package com.example.streaminganalytics.domain.repository;
 
 import com.example.streaminganalytics.domain.StreamingAnalytics;
 import org.springframework.data.mongodb.repository.MongoRepository;

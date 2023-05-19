@@ -1,4 +1,4 @@
-package com.example.streaminganalytics.config;
+package com.example.streaminganalytics.infrastructure.rabbit.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
