@@ -1,7 +1,8 @@
 version: "3.8"
 services:
   streaming-analytics:
-    build:  .
+    container_name: streaming-analytics-app
+    build: .
     ports:
       - "8080:8080"
     depends_on:
@@ -22,7 +23,7 @@ services:
     image: mongo:latest
     restart: always
     ports:
-      - 27017:27017
+      - '27017:27017'
     volumes:
       - ./scripts/mongo/init/:/docker-entrypoint-initdb.d
     environment:
