@@ -31,10 +31,24 @@ public class StatisticsServiceImpl implements StatisticsService {
      * @param input the input from the queue
      */
     @Override
-    public void doCalculations(final DataInput input) {
+    public void calculateAndSaveAnalytics(final DataInput input) {
 
-        final Map<String, List<DataStream>> mapStream = input.getDatastreams().stream()
-                .collect(Collectors.groupingBy(DataStream::getId));
+        final List<StreamingAnalytics> analytics = calculateAnalyticsFromDataStreams(input.getDatastreams());
+
+        saveAnalytics(analytics);
+
+    }
+
+    /**
+     * Calculates the analytics for each datastream.
+     *
+     * @param dataStreamList the list of datastreams
+     * @return the list of analytics
+     */
+    private List<StreamingAnalytics> calculateAnalyticsFromDataStreams(List<DataStream> dataStreamList) {
+
+        final Map<String, List<DataStream>> mapStream = dataStreamList.stream().collect(Collectors.groupingBy(
+                DataStream::getId));
 
         List<StreamingAnalytics> analytics = new ArrayList<>();
 
@@ -47,8 +61,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                     .standardDesviation(stats.getStandardDeviation()).quartiles(getQuartiles(stats))
                     .max(stats.getMax()).min(stats.getMin()).build());
         }
-        this.streamingAnalyticsRepository.saveAll(analytics);
-        log.debug("Saved in Mongo.");
+        return analytics;
     }
 
     /**
@@ -64,5 +77,15 @@ public class StatisticsServiceImpl implements StatisticsService {
         final Double quartile3 = stats.getPercentile(75);
 
         return Arrays.asList(quartile1, quartile2, quartile3);
+    }
+
+    /**
+     * Saves calculated analytics in Mongo.
+     *
+     * @param analytics
+     */
+    private void saveAnalytics(final List<StreamingAnalytics> analytics) {
+        this.streamingAnalyticsRepository.saveAll(analytics);
+        log.debug(analytics.size() + " analytics saved in database.");
     }
 }

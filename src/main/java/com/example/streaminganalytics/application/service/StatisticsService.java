@@ -7,5 +7,5 @@ import com.example.streaminganalytics.domain.DataInput;
  */
 public interface StatisticsService {
 
-    void doCalculations(final DataInput input);
+    void calculateAndSaveAnalytics(final DataInput input);
 }

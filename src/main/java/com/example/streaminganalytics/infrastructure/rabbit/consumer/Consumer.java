@@ -34,6 +34,6 @@ public class Consumer {
         final String message = new String(input, StandardCharsets.UTF_8);
         final DataInput dataInput = new ObjectMapper().readValue(message, DataInput.class);
         log.debug("Message received.");
-        this.statisticsService.doCalculations(dataInput);
+        this.statisticsService.calculateAndSaveAnalytics(dataInput);
     }
 }
