@@ -1,5 +1,6 @@
 package com.example.streaminganalytics.domain;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
  * The input object.
  */
 @Data
+@Builder
 public class DataInput {
 
     private String version;

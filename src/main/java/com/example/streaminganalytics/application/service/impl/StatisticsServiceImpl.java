@@ -31,11 +31,11 @@ public class StatisticsServiceImpl implements StatisticsService {
      * @param input the input from the queue
      */
     @Override
-    public void calculateAndSaveAnalytics(final DataInput input) {
+    public List<StreamingAnalytics> calculateAndSaveAnalytics(final DataInput input) {
 
         final List<StreamingAnalytics> analytics = calculateAnalyticsFromDataStreams(input.getDatastreams());
 
-        saveAnalytics(analytics);
+        return saveAnalytics(analytics);
 
     }
 
@@ -58,7 +58,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             analytics.add(StreamingAnalytics.builder().dataStreamingId(entry.getKey())
                     .createdAt(Date.from(Instant.now())).mean(stats.getMean())
                     .median(stats.getPercentile(50)).mode(StatUtils.mode(stats.getValues()))
-                    .standardDesviation(stats.getStandardDeviation()).quartiles(getQuartiles(stats))
+                    .standardDeviation(stats.getStandardDeviation()).quartiles(getQuartiles(stats))
                     .max(stats.getMax()).min(stats.getMin()).build());
         }
         return analytics;
@@ -84,8 +84,10 @@ public class StatisticsServiceImpl implements StatisticsService {
      *
      * @param analytics
      */
-    private void saveAnalytics(final List<StreamingAnalytics> analytics) {
-        this.streamingAnalyticsRepository.saveAll(analytics);
+    private List<StreamingAnalytics> saveAnalytics(final List<StreamingAnalytics> analytics) {
+        List<StreamingAnalytics> savedStreamingAnalyticsList = this.streamingAnalyticsRepository.saveAll(analytics);
         log.debug(analytics.size() + " analytics saved in database.");
+
+        return savedStreamingAnalyticsList;
     }
 }
