@@ -24,7 +24,7 @@ public class StreamingAnalytics {
 
     private double[] mode;
 
-    private double standardDesviation;
+    private double standardDeviation;
 
     private List<Double> quartiles;
 
