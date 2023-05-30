@@ -1,5 +1,6 @@
 package com.example.streaminganalytics.application.service.impl;
 
+import com.example.streaminganalytics.application.utils.DateTimeUtil;
 import com.example.streaminganalytics.domain.DataInput;
 import com.example.streaminganalytics.domain.DataStream;
 import com.example.streaminganalytics.domain.StreamingAnalytics;
@@ -24,6 +25,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Autowired
     private StreamingAnalyticsRepository streamingAnalyticsRepository;
+
+    @Autowired
+    private DateTimeUtil dateTimeUtil;
+
 
     /**
      * Group the DataStream objects with their data points for each data stream id and then make the calculations.
@@ -56,7 +61,7 @@ public class StatisticsServiceImpl implements StatisticsService {
             final DescriptiveStatistics stats = new DescriptiveStatistics();
             entry.getValue().get(0).getDatapoints().stream().forEach(datapoint -> stats.addValue(datapoint.getValue()));
             analytics.add(StreamingAnalytics.builder().dataStreamingId(entry.getKey())
-                    .createdAt(Date.from(Instant.now())).mean(stats.getMean())
+                    .createdAt(dateTimeUtil.getDate()).mean(stats.getMean())
                     .median(stats.getPercentile(50)).mode(StatUtils.mode(stats.getValues()))
                     .standardDeviation(stats.getStandardDeviation()).quartiles(getQuartiles(stats))
                     .max(stats.getMax()).min(stats.getMin()).build());

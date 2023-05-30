@@ -22,7 +22,6 @@ public class StreamingAnalyticsRepositoryTests {
     @Autowired
     private StreamingAnalyticsRepository streamingAnalyticsRepository;
 
-
     @AfterEach
     void cleanUpDatabase() {
         streamingAnalyticsRepository.deleteAll();
