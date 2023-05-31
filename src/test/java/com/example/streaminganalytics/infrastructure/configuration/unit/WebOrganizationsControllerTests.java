@@ -1,4 +1,4 @@
-package com.example.streaminganalytics.infrastructure.configuration;
+package com.example.streaminganalytics.infrastructure.configuration.unit;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;

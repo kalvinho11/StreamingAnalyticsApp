@@ -1,4 +1,4 @@
-package com.example.streaminganalytics.infrastructure.configuration;
+package com.example.streaminganalytics.infrastructure.configuration.unit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -9,14 +9,13 @@ import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
+@DataMongoTest
 public class StreamingAnalyticsRepositoryTests {
 
     @Autowired

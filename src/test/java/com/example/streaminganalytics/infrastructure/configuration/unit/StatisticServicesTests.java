@@ -1,4 +1,4 @@
-package com.example.streaminganalytics.infrastructure.configuration;
+package com.example.streaminganalytics.infrastructure.configuration.unit;
 
 import com.example.streaminganalytics.application.service.impl.StatisticsServiceImpl;
 import com.example.streaminganalytics.application.utils.DateTimeUtilImpl;
