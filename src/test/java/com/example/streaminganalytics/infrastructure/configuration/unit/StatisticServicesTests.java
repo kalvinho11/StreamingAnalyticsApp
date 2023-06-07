@@ -1,31 +1,48 @@
-package com.example.streaminganalytics.infrastructure.configuration;
+package com.example.streaminganalytics.infrastructure.configuration.unit;
 
-import com.example.streaminganalytics.application.service.StatisticsService;
+import com.example.streaminganalytics.application.service.impl.StatisticsServiceImpl;
+import com.example.streaminganalytics.application.utils.DateTimeUtilImpl;
 import com.example.streaminganalytics.domain.DataInput;
 import com.example.streaminganalytics.domain.DataStream;
 import com.example.streaminganalytics.domain.Datapoint;
 import com.example.streaminganalytics.domain.StreamingAnalytics;
+import com.example.streaminganalytics.domain.repository.StreamingAnalyticsRepository;
 import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class StatisticServicesTests {
 
-    @Autowired
-    private StatisticsService statisticsService;
+    @Mock
+    private StreamingAnalyticsRepository streamingAnalyticsRepository;
+
+    @Mock
+    private DateTimeUtilImpl dateTimeUtil;
+
+    @InjectMocks
+    private StatisticsServiceImpl statisticsService;
 
     @Test
     void shouldCalculateStatistic() {
         DataInput receivedDataInput = generateDataInput();
-        List<StreamingAnalytics> expectedStreamingAnalytics = generateExpectedAnalytics();
+        Date dateTimeNow = Date.from(Instant.now());
+        List<StreamingAnalytics> expectedStreamingAnalytics = generateExpectedAnalytics(dateTimeNow);
+
+        when(dateTimeUtil.getDate()).thenReturn(dateTimeNow);
+        when(streamingAnalyticsRepository.saveAll(expectedStreamingAnalytics)).thenReturn(expectedStreamingAnalytics);
 
         List<StreamingAnalytics> obtainedStreamingAnalytics = statisticsService.calculateAndSaveAnalytics(
                 receivedDataInput);
@@ -67,15 +84,17 @@ public class StatisticServicesTests {
     }
 
 
-    private List<StreamingAnalytics> generateExpectedAnalytics() {
+    private List<StreamingAnalytics> generateExpectedAnalytics(Date dateTimeNow) {
 
         StreamingAnalytics streamingAnalytics1 = StreamingAnalytics.builder().dataStreamingId("example_id_001").max(60)
                 .min(12).median(40).mode(calculateMode(Arrays.asList(60, 12, 40))).quartiles(calculateQuartiles(Arrays
-                        .asList(60, 12, 40))).mean(37.333333333333336).standardDeviation(24.110855093366833).build();
+                        .asList(60, 12, 40))).mean(37.333333333333336).standardDeviation(24.110855093366833).createdAt(
+                                dateTimeNow).build();
 
         StreamingAnalytics streamingAnalytics2 = StreamingAnalytics.builder().dataStreamingId("example_id_002").max(232)
                 .min(10).median(30).mode(calculateMode(Arrays.asList(30, 232, 10))).quartiles(calculateQuartiles(Arrays
-                        .asList(30, 232, 10))).mean(90.66666666666666).standardDeviation(122.80608019692401).build();
+                        .asList(30, 232, 10))).mean(90.66666666666666).standardDeviation(122.80608019692401).createdAt(
+                                dateTimeNow).build();
 
         return Arrays.asList(streamingAnalytics1, streamingAnalytics2);
     }
