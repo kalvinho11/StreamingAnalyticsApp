@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @ExtendWith(MockitoExtension.class)
 public class WebOrganizationServiceTests {
@@ -32,7 +33,7 @@ public class WebOrganizationServiceTests {
 
 
     @Test
-    public void addOrganization() {
+    void shouldAddOrganization() {
         Organization organizationToSave = Organization.builder().organizationName("Company1")
                 .active(true).organizationCountryISO("ES").build();
         Organization expectedOrganization = Organization.builder().organizationId(1L).organizationName("Company1")
@@ -47,18 +48,49 @@ public class WebOrganizationServiceTests {
         assertThat(organization).isEqualTo(expectedOrganization);
     }
 
-    @Test()
-    public void addAnExistingOrganization() {
+    @Test
+    void shouldThrowExceptionWhenTryingToAddAnExistingOrganization() {
         Organization organizationToSave = Organization.builder().organizationId(100L).organizationName("Company1")
                 .active(true).organizationCountryISO("ES").build();
 
         when(organizationRepository.findByOrganizationName(organizationToSave.getOrganizationName())).thenReturn(Arrays.
                 asList(organizationToSave));
 
-        Assertions.assertThrows(ResponseStatusException.class, () -> {
-            webOrganizationService.addOrganization(organizationToSave);
-        });
+        Assertions.assertThrows(ResponseStatusException.class, () -> webOrganizationService.addOrganization(
+                organizationToSave));
 
+    }
+
+    @Test
+    void shouldGetOrganizationByOrganizationId() {
+        Organization organization = Organization.builder().organizationId(1L).organizationName("Company1")
+                .active(true).organizationCountryISO("ES").build();
+
+        when(organizationRepository.findByOrganizationId(1L)).thenReturn(Collections.singletonList(organization));
+
+        assertThat(webOrganizationService.getOrganization(1L)).isEqualTo(organization);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToGETANonExistingOrganization() {
+
+        when(organizationRepository.findByOrganizationId(1L)).thenReturn(Collections.emptyList());
+
+        Assertions.assertThrows(ResponseStatusException.class, () -> webOrganizationService.getOrganization(1L));
+    }
+
+    @Test
+    void shouldDeleteOrganization() {
+        when(organizationRepository.deleteByOrganizationId(1L)).thenReturn(1);
+
+        assertThat(webOrganizationService.deleteOrganization(1L)).isEqualTo(1);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenTryingToDeleteANonExistingOrganization() {
+        when(organizationRepository.deleteByOrganizationId(1L)).thenReturn(0);
+
+        Assertions.assertThrows(ResponseStatusException.class, () -> webOrganizationService.deleteOrganization(1L));
     }
 
 

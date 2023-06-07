@@ -30,4 +30,8 @@ public class DatabaseSequenceGenerator {
         return !Objects.isNull(counter) ? counter.getSeq() : 1;
 
     }
+
+    public void deleteAll() {
+        mongoOperations.dropCollection("database_sequences");
+    }
 }

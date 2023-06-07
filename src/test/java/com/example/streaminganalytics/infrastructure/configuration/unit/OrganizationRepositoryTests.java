@@ -33,5 +33,19 @@ public class OrganizationRepositoryTests {
 
     }
 
+    @Test
+    void shouldDeleteOrganization() {
+        Organization organization = Organization.builder().organizationId(1L).organizationName("Company1").active(true)
+                .organizationCountryISO("ES").build();
+
+        organizationRepository.save(organization);
+
+        Integer numOfDeletedOrganizations = organizationRepository.deleteByOrganizationId(organization
+                .getOrganizationId());
+
+        assertThat(numOfDeletedOrganizations).isEqualTo(1);
+        assertThat(organizationRepository.findByOrganizationName(organization.getOrganizationName())).isEmpty();
+    }
+
 
 }

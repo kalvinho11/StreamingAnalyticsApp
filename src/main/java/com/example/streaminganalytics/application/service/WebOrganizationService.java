@@ -6,5 +6,7 @@ public interface WebOrganizationService {
 
     Organization addOrganization(Organization organization);
 
-    void getOrganization();
+    Organization getOrganization(Long organizationId);
+
+    Integer deleteOrganization(Long organizationId);
 }

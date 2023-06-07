@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.example.streaminganalytics.application.service.impl.WebOrganizationServiceImpl;
 import com.example.streaminganalytics.domain.Organization;
-import com.example.streaminganalytics.infrastructure.controller.StatisticsController;
+import com.example.streaminganalytics.infrastructure.controller.OrganizationController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,7 @@ public class WebOrganizationsControllerTests {
     private WebOrganizationServiceImpl webOrganizationService;
 
     @InjectMocks
-    private StatisticsController statisticsController;
+    private OrganizationController statisticsController;
 
     @Test
     void shouldSaveOrganizationOK() {
@@ -52,7 +52,52 @@ public class WebOrganizationsControllerTests {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
         assertThat(response.getBody()).isEqualTo("Organization name already exists");
 
+    }
 
+    @Test
+    void shouldGetOrganization() {
+        Organization organization = Organization.builder().organizationId(1L).organizationName("Company1")
+                .active(true).organizationCountryISO("ES").build();
+
+        when(webOrganizationService.getOrganization(1L)).thenReturn(organization);
+
+        ResponseEntity<Object> response = statisticsController.getOrganization(1L);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo(organization);
+    }
+
+    @Test
+    void shouldGetA404WhenTryingToGetANonExistingOrganization() {
+
+        when(webOrganizationService.getOrganization(1L)).thenThrow(new ResponseStatusException(HttpStatus
+                .NOT_FOUND, "There is no organization with that id."));
+
+        ResponseEntity<Object> response = statisticsController.getOrganization(1L);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isEqualTo("There is no organization with that id.");
+    }
+
+    @Test
+    void shouldDeleteOrganization() {
+        when(webOrganizationService.deleteOrganization(1L)).thenReturn(1);
+
+        ResponseEntity<Object> response = statisticsController.deleteOrganization(1L);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    void shouldGetA404WhenTryingToDeleteANonExistingOrganization() {
+
+        when(webOrganizationService.deleteOrganization(1L)).thenThrow(new ResponseStatusException(HttpStatus
+                .NOT_FOUND, "There is no organization with that id."));
+
+        ResponseEntity<Object> response = statisticsController.deleteOrganization(1L);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isEqualTo("There is no organization with that id.");
     }
 
 

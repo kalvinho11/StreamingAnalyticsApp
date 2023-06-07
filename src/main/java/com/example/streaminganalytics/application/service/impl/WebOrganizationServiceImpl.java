@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 public class WebOrganizationServiceImpl implements WebOrganizationService {
 
@@ -30,8 +32,21 @@ public class WebOrganizationServiceImpl implements WebOrganizationService {
     }
 
     @Override
-    public void getOrganization() {
+    public Organization getOrganization(Long organizationId) {
+        List<Organization> organizations = organizationRepository.findByOrganizationId(organizationId);
+        if (organizations.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no organization with that id.");
+        }
+        return organizations.get(0);
+    }
 
+    @Override
+    public Integer deleteOrganization(Long organizationId) {
+        Integer deletedOrganizations = organizationRepository.deleteByOrganizationId(organizationId);
+        if (deletedOrganizations == 0) {
+            throw  new ResponseStatusException(HttpStatus.NOT_FOUND, "There is no organization with that id.");
+        }
+        return deletedOrganizations;
     }
 
     private boolean organizationExists(String organizationName) {
